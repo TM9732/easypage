@@ -23,33 +23,16 @@ table{border-collapse:collapse;border-spacing:0}
 
 /* layout */
 html, body, .page-wrap { width: 100%; height: 100%; overflow: hidden; }
-.page-wrap { overflow-y: scroll;}
+.page-wrap { overflow-y: scroll; }
 .container { width: 640px; overflow: hidden; margin: 0 auto; position: relative; }
-.page-item { width: 0; position: absolute; left: 0; top: 0; overflow: hidden; -webkit-transition:-webkit-transform .5s ease-out; transition:transform .5s ease-out; -webkit-transform: translate(640px, 0); transform: translate(640px, 0);}
+.page-item { width: 0; position: absolute; left: 0; top: 0; overflow: hidden; -webkit-transition: -webkit-transform .5s ease-out; transition: transform .5s ease-out; }
 .blank { width: 100%; height: 100%; position: absolute; left: 0; top: 0; z-index: 55; display: none; }
-.page-1 { position: relative;}
-.nodur { -webkit-transition-duration: 0s; transition-duration: 0s; }
-.in { -webkit-transform: translate(0, 0); transform: translate(0, 0); width: 100%; }
-.out { -webkit-transform: translate(640px, 0); transform: translate(640px, 0); }
-
-/* page */
-.page-1 { height: 1000px; background-color: #09f; }
-.page-2 { height: 500px; background-color: #090 }
-.page-3 { height: 1000px; background-color: #960 }
-.page-4 { height: 1500px; background-color: #c09 }
-.page-5 { height: 500px; background-color: #090 }
-.page-6 { height: 1500px; background-color: #c09 }
-
-
-.link a{ width: 70%; height: 60px; line-height: 60px; text-align: center; background-color: #fff; cursor: pointer; display: block; margin: 30px auto 0;}
-.pic{ text-align: center; margin-top: 30px;}
-
-
-
-
+.nodur, .page-index { -webkit-transition-duration: 0s; transition-duration: 0s; }
+.in, .page-index { -webkit-transform: translate(0, 0); transform: translate(0, 0); }
+.out, .page-item { -webkit-transform: translate(640px, 0); transform: translate(640px, 0); }
 
 /* loading */
-.loading { width: 100%; height: 100%; position: fixed; overflow: hidden; left: 0; top: 0; background: rgba(0, 0, 0, .2); z-index: 555; -webkit-transition: opacity .5s ease-in .2s; transition: opacity .5s ease-in .2s }
+.loading { width: 0; height: 100%; position: fixed; overflow: hidden; left: 0; top: 0; background: rgba(0, 0, 0, .2); z-index: 555; opacity: 0; -webkit-transition: opacity .5s ease-in .2s; transition: opacity .5s ease-in .2s }
 .spin { width: 60px; height: 8px; position: absolute; top: 0; right: 0; bottom: 0; left: 0; margin: auto }
 .spin i { width: 16px; height: 8px; background: #fff; display: inline-block; -webkit-animation: spin 1s infinite ease-in-out; animation: spin 1s infinite ease-in-out }
 .spin i:nth-child(2) { -webkit-animation-delay: .3s; animation-delay: .3s; margin: 0 6px }
@@ -64,6 +47,21 @@ html, body, .page-wrap { width: 100%; height: 100%; overflow: hidden; }
 	30% { opacity: .6 }
 	60% { opacity: .9 }
 }
+
+/* page */
+.page-1 { height: 1000px; background-color: #09f; }
+.page-2 { height: 500px; background-color: #090 }
+.page-3 { height: 1000px; background-color: #960 }
+.page-4 { height: 1500px; background-color: #c09 }
+.page-5 { height: 500px; background-color: #090 }
+.page-6 { height: 1500px; background-color: #c09 }
+
+.link a{ width: 70%; height: 60px; line-height: 60px; text-align: center; background-color: #fff; cursor: pointer; display: block; margin: 30px auto 0;}
+.pic{ text-align: center; margin-top: 30px;}
+
+
+
+
 
 
 
