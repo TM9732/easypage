@@ -14,10 +14,11 @@ easypage.prototype = {
         $("body").append(that.loading).append(that.blank);
         //初始化第一页
         var indexItem = that.container.children(".page-" + that.curPage);
-        indexItem.addClass("page-index").css({
-            width: '100%',
+        that.translate(indexItem[0], [ 0, 0 ]);
+        indexItem.css({
             position:"relative"
-        });;
+        });
+        indexItem[0].been = 1;
         var imgs = indexItem.find("img[data-src]");
         that.loadImg(imgs);
         that.pageReady(indexItem);
@@ -60,6 +61,15 @@ easypage.prototype = {
             };
         }
     },
+    translate:function(a, b, c) {
+        if (!a || !b) return;
+        var s = a && a.style, x = b[0] || 0, y = b[1] || 0, z = b[2] || 0;
+        if (typeof c != "undefined") {
+            s.webkitTransitionDuration = s.MozTransitionDuration = s.msTransitionDuration = s.OTransitionDuration = s.transitionDuration = c + "ms";
+        }
+        s.webkitTransform = "translate3d(" + x + "px," + y + "px," + z + "px)";
+        s.msTransform = s.MozTransform = s.OTransform = "translate(" + x + "px," + y + "px)";
+    },
     isLoading:function(a) {
         var that = this;
         if (a) {
@@ -98,37 +108,31 @@ easypage.prototype = {
         var inItem = args.inItem;
         var outItem = args.outItem;
         var target = args.target;
-        var back = target.attr("data-back") == null ? !1 :!0;
+        var inItemN = inItem[0];
         //初始化进入
         var winH = $(window).height();
         var outH = outItem.height();
         var cH = winH > outH ? winH :outH;
         that.container.height(cH);
         that.blank.css("display", "block");
-        inItem.css({
-            width:"100%",
-            top:that.pageWrap.scrollTop()
-        });
-        if (back) {
-            inItem.addClass("nodur in").css({
-                position:"relative",
-                "z-index":1
+        var back = target.attr("data-back") == null ? !1 :!0;
+        var direction = back ? -1 :1;
+        that.translate(inItem[0], [ 640 * direction, 0 ], 0);
+        setTimeout(function() {
+            inItem.css({
+                top:that.pageWrap.scrollTop()
             });
-            outItem.removeClass('page-index').addClass("out").css({
-                position:"absolute",
-                "z-index":2
+            that.translate(inItem[0], [ 0, 0 ], 500);
+            outItem.css({
+                position:"absolute"
             });
-        } else {
-            inItem.addClass("in").css({
-                position:"absolute",
-                "z-index":2
-            });
-        }
+            that.translate(outItem[0], [ -640 * direction, 0 ], 500);
+        }, 1);
         //进入以后
         setTimeout(function() {
             //是否为第一次进入，加载图片，进入后加载图片可减小进入动画的卡顿
-            if (!inItem.hasClass("page-in")) {
-                inItem.addClass("page-in");
+            if ("undefined" == typeof inItemN.been) {
+                inItemN.been = 1;
                 var imgs = inItem.find("img[data-src]");
                 that.loadImg(imgs);
                 that.pageReady(inItem);
@@ -138,14 +142,11 @@ easypage.prototype = {
             that.pageWrap.scrollTop(0);
             that.container.height("auto");
             that.blank.css("display", "none");
-            inItem.removeClass("nodur").css({
+            inItem.css({
                 top:0,
-                "z-index":1,
                 position:"relative"
             });
-            outItem.removeClass("page-active in out page-index").css({
-                width:0,
-                "z-index":1,
+            outItem.removeClass("page-active").css({
                 position:"absolute"
             });
         }, 500);
