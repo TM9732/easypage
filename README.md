@@ -4,7 +4,7 @@ Make webapp easy.
 Use it, you can easily create a page system.
 #
 
-对于效率的优化
+# 对于效率的优化
 #
 1. 使用css3属性（-webkit-transform）来实现动画效果，而非传统的css样式
 #
@@ -20,9 +20,11 @@ Use it, you can easily create a page system.
 #
 7. 动画并没有使用到animation，因为js不能很方便地直接对它的属性进行控制，测试过修改动画样式类来改变animation，同环境下会不时出现明显的卡顿，效率相对比较低
 #
-#
+
 # v1.2
 改变图片加载判断的时间点，所需图片加载完成后再进行动画，这样更符合逻辑。
+#
 同时，把前面都忽略的背景图片加载算进去了。
+#
 增加了一个动画结束后的api。
-
+#
