@@ -4,8 +4,7 @@ Make webapp easy.
 Use it, you can easily create a page system.
 #
 
-# 对于效率的优化
-#
+# More smooth
 1. 使用css3属性（-webkit-transform）来实现动画效果，而非传统的css样式
 #
 2. -webkit-transition-property中用-webkit-transform代替all
