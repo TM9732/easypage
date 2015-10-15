@@ -1,27 +1,30 @@
-﻿var easypage = function() {
+﻿var easypage = function(args) {
     this.pageWrap = $(".page-wrap");
     this.container = this.pageWrap.children(".container");
     this.item = this.container.children(".page-item");
     this.loading = $('<div class="loading"><div class="spin"><i></i><i></i><i></i></div></div>');
-    this.blank = $('<div class="blank">');
     this.curPage = 1;
+    if ("undefined" != typeof args) {
+        this.afterIn = args.afterIn;
+    }
     this.initialize();
 };
 
 easypage.prototype = {
     initialize:function() {
         var that = this;
-        $("body").append(that.loading).append(that.blank);
+        $("body").append(that.loading);
         //初始化第一页
         var indexItem = that.container.children(".page-" + that.curPage);
         that.translate(indexItem[0], [ 0, 0 ]);
-        indexItem.css({
+        indexItem.addClass("page-in").css({
             position:"relative"
         });
-        indexItem[0].been = 1;
         var imgs = indexItem.find("img[data-src]");
         that.loadImg(imgs);
-        that.pageReady(indexItem);
+        that.pageReady(indexItem, function() {
+            indexItem.addClass("page-active");
+        });
         //页面跳转事件
         that.item.find(".to-page").click(function(event) {
             var target = $(this), index = target.attr("data-page");
@@ -81,26 +84,35 @@ easypage.prototype = {
             that.loading.css("opacity", 0);
             setTimeout(function() {
                 that.loading.css("width", 0);
-            }, 500);
+            }, 300);
         }
     },
-    pageReady:function(a) {
+    pageReady:function(a, f) {
         var that = this;
         var imgs = a.find("img.w-img");
-        if (!imgs.length) {
-            a.addClass("page-active");
+        var bgImg = a.css("background-image");
+        if (!imgs.length && bgImg == "none") {
+            "undefined" != typeof f && f();
             return;
         }
         that.isLoading(1);
         var srcs = [];
-        imgs.each(function() {
-            srcs.push($(this).attr("data-src"));
-        });
+        if (bgImg != "none") {
+            bgImg = bgImg.replace("url(", "").replace("url(", "").replace(")", "").replace('"', "").replace('"', "");
+            srcs = [ bgImg ];
+        }
+        if (imgs.length) {
+            imgs.each(function() {
+                srcs.push($(this).attr("data-src"));
+            });
+        }
         that.checkImgs(srcs, function() {
-            that.isLoading(0);
             setTimeout(function() {
-                a.addClass("page-active");
-            }, 500);
+                that.isLoading(0);
+            }, 300);
+            setTimeout(function() {
+                "undefined" != typeof f && f();
+            }, 600);
         });
     },
     pageSwitch:function(args) {
@@ -114,11 +126,11 @@ easypage.prototype = {
         var outH = outItem.height();
         var cH = winH > outH ? winH :outH;
         that.container.height(cH);
-        that.blank.css("display", "block");
         var back = target.attr("data-back") == null ? !1 :!0;
         var direction = back ? -1 :1;
         that.translate(inItem[0], [ 640 * direction, 0 ], 0);
-        setTimeout(function() {
+        function pageIn() {
+            //开始进入
             inItem.css({
                 top:that.pageWrap.scrollTop()
             });
@@ -127,33 +139,38 @@ easypage.prototype = {
                 position:"absolute"
             });
             that.translate(outItem[0], [ -640 * direction, 0 ], 500);
-        }, 1);
-        //进入以后
-        setTimeout(function() {
-            //是否为第一次进入，加载图片，进入后加载图片可减小进入动画的卡顿
-            if ("undefined" == typeof inItemN.been) {
-                inItemN.been = 1;
-                var imgs = inItem.find("img[data-src]");
-                that.loadImg(imgs);
-                that.pageReady(inItem);
-            } else {
-                inItem.addClass("page-active");
-            }
-            that.pageWrap.scrollTop(0);
-            that.container.height("auto");
-            that.blank.css("display", "none");
-            inItem.css({
-                top:0,
-                position:"relative"
-            });
-            outItem.removeClass("page-active").css({
-                position:"absolute"
-            });
-        }, 500);
+            //进入以后
+            setTimeout(function() {
+                that.pageWrap.scrollTop(0);
+                that.container.height("auto");
+                inItem.addClass("page-active").css({
+                    top:0,
+                    position:"relative"
+                });
+                outItem.removeClass("page-active").css({
+                    position:"absolute"
+                });
+                "undefined" != typeof that.afterIn && that.afterIn();
+            }, 500);
+        }
+        //是否为第一次进入
+        if (!inItem.hasClass("page-in")) {
+            inItem.addClass("page-in");
+            var imgs = inItem.find("img[data-src]");
+            that.loadImg(imgs);
+            that.pageReady(inItem, pageIn);
+        } else {
+            pageIn();
+        }
     }
 };
 
 $(function() {
-    var mypage = new easypage();
+    var a = 1;
+    var mypage = new easypage({
+        afterIn:function() {
+            console.log("Animation effect end.");
+        }
+    });
     console.log(mypage);
 });
