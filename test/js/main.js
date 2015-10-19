@@ -1,4 +1,7 @@
-﻿var easypage = function(args) {
+﻿
+
+
+var easypage = function(args) {
     this.pageWrap = $(".page-wrap");
     this.container = this.pageWrap.children(".container");
     this.item = this.container.children(".page-item");
@@ -147,9 +150,7 @@ easypage.prototype = {
                     top:0,
                     position:"relative"
                 });
-                outItem.removeClass("page-active").css({
-                    position:"absolute"
-                });
+                outItem.removeClass("page-active");
                 "undefined" != typeof that.afterIn && that.afterIn();
             }, 500);
         }

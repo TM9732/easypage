@@ -24,7 +24,7 @@ table{border-collapse:collapse;border-spacing:0}
 /* layout */
 html, body, .page-wrap { width: 100%; height: 100%; overflow: hidden; }
 .page-wrap { overflow-y: scroll; }
-.container { width: 640px; overflow: hidden; margin: 0 auto; position: relative; }
+.container { width: 640px; min-height: 100%; overflow: hidden; margin: 0 auto; position: relative; }
 .page-item { width: 100%; position: absolute; left: 0; top: 0; overflow: hidden; -webkit-transform: translate(640px, 0); transform: translate(640px, 0); -webkit-transition-property: -webkit-transform; transition-property: transform; }
 .blank { width: 100%; height: 100%; position: absolute; left: 0; top: 0; z-index: 55; display: none; }
 
